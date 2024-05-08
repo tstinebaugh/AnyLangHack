@@ -19,36 +19,32 @@ def get_computer_selection():
     return action
 
 def determine_winner(user_action, computer_action):
+    beats = {
+        Action.Rock: Action.Scissors,
+        Action.Paper: Action.Rock,
+        Action.Scissors: Action.Paper
+    }
+    
     if user_action == computer_action:
         print(f"Both players selected {user_action.name}. It's a tie!")
-    elif user_action == Action.Rock:
-        if computer_action == Action.Scissors:
-            print("Rock smashes scissors! You win!")
-        else:
-            print("Paper covers rock! You lose.")
-    elif user_action == Action.Paper:
-        if computer_action == Action.Rock:
-            print("Paper covers rock! You win!")
-        else:
-            print("Scissors cuts paper! You lose.")
-    elif user_action == Action.Scissors:
-        if computer_action == Action.Paper:
-            print("Scissors cuts paper! You win!")
-        else:
-            print("Rock smashes scissors! You lose.")
+    elif beats[user_action] == computer_action:
+        print(f"{user_action.name} beats {computer_action.name}! You win!")
+    else:
+        print(f"{computer_action.name} beats {user_action.name}! You lose.")
+        
+if __name__ == '__main__':
+    while True:
+        try:
+            user_action = get_user_selection()
+        except ValueError as e:
+            range_str = f"[0, {len(Action) - 1}]"
+            print(f"Invalid selection. Enter a value in range {range_str}")
+            continue
 
-while True:
-    try:
-        user_action = get_user_selection()
-    except ValueError as e:
-        range_str = f"[0, {len(Action) - 1}]"
-        print(f"Invalid selection. Enter a value in range {range_str}")
-        continue
+        computer_action = get_computer_selection()
+        determine_winner(user_action, computer_action)
 
-    computer_action = get_computer_selection()
-    determine_winner(user_action, computer_action)
-
-    play_again = input("Play again? (y/n): ")
-    if play_again.lower() != "y":
-        break
+        play_again = input("Play again? (y/n): ")
+        if play_again.lower() != "y":
+            break
 
